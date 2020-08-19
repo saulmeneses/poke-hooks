@@ -6,36 +6,41 @@ import PokemonList from './components/PokemonList';
 import Detail from './components/Detail';
 
 
+const TEAMS = {
+  BLUE: 'blue',
+  RED: 'red',
+};
+
 class App extends Component {
 
   state = {
-    selectedPoke: 'ditto',
-    team: 'blue',
+    selectedPokemon: 'ditto',
+    team: TEAMS.BLUE,
     closed: false,
   };
 
 
   selectPokemon = name => {
-    this.setState({ selectedPoke: name });
+    this.setState({ selectedPokemon: name });
   };
 
-  closeHandler = () => {
+  closePokedex = () => {
     this.setState({ closed: true });
   };
 
-  toggleState = () => {
-    const team = this.state.team === 'blue' ? 'red' : 'blue';
-    this.setState({ team })
+  changeTeam = () => {
+    const team = this.state.team === TEAMS.BLUE ? TEAMS.RED : TEAMS.BLUE;
+    this.setState({ team });
   }
 
   render() {
     let content = (
       <div className="container">
         <PokemonList selectPokemon={this.selectPokemon} team={this.state.team}/>
-        <Detail selectedPoke={this.state.selectedPoke}/>
+        <Detail selectedPokemon={this.state.selectedPokemon}/>
         <div>
-          <button className="toggle-team" onClick={this.toggleState}>Toggle team!</button>
-          <button className="toggle-team" onClick={this.closeHandler}>Close pokedex</button>
+          <button className="action-button" onClick={this.changeTeam}>Change team!</button>
+          <button className="action-button" onClick={this.closePokedex}>Close pokedex</button>
           <p>You are now part of the <strong className={`team-${this.state.team}`}>{this.state.team}</strong> team!!!</p>
         </div>
       </div>

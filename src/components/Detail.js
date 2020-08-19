@@ -8,7 +8,7 @@ class Detail extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     console.log('shouldComponentUpdate');
     return (
-      nextProps.selectedPoke !== this.props.selectedPoke ||
+      nextProps.selectedPokemon !== this.props.selectedPokemon ||
       nextState.loadedPokemon.id !== this.state.loadedPokemon.id ||
       nextState.isLoading !== this.state.isLoading
     );
@@ -16,7 +16,7 @@ class Detail extends Component {
 
   componentDidUpdate(prevProps) {
     console.log('Component did update');
-    if (prevProps.selectedPoke !== this.props.selectedPoke) {
+    if (prevProps.selectedPokemon !== this.props.selectedPokemon) {
       this.fetchData();
     }
   }
@@ -28,11 +28,11 @@ class Detail extends Component {
   fetchData = async () => {
     console.log(
       'Sending Http request for new pokemon with name ' +
-        this.props.selectedPoke
+        this.props.selectedPokemon
     );
     this.setState({ isLoading: true });
     try {
-      const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${this.props.selectedPoke}`);
+      const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${this.props.selectedPokemon}`);
       const pokeData = await response.json();
 
       const loadedPokemon = {
