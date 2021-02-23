@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import Summary from './Summary';
+import Summary from "./Summary";
 
 class Detail extends Component {
   state = { loadedPokemon: {}, isLoading: false };
 
   shouldComponentUpdate(nextProps, nextState) {
-    console.log('shouldComponentUpdate');
+    console.log("shouldComponentUpdate");
     return (
       nextProps.selectedPokemon !== this.props.selectedPokemon ||
       nextState.loadedPokemon.id !== this.state.loadedPokemon.id ||
@@ -15,7 +15,7 @@ class Detail extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    console.log('Component did update');
+    console.log("Component did update");
     if (prevProps.selectedPokemon !== this.props.selectedPokemon) {
       this.fetchData();
     }
@@ -27,12 +27,14 @@ class Detail extends Component {
 
   fetchData = async () => {
     console.log(
-      'Sending Http request for new pokemon with name ' +
+      "Sending Http request for new pokemon with name " +
         this.props.selectedPokemon
     );
     this.setState({ isLoading: true });
     try {
-      const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${this.props.selectedPokemon}`);
+      const response = await fetch(
+        `https://pokeapi.co/api/v2/pokemon/${this.props.selectedPokemon}`
+      );
       const pokeData = await response.json();
 
       const loadedPokemon = {
@@ -41,7 +43,7 @@ class Detail extends Component {
         height: pokeData.height,
         weight: pokeData.weight,
         type: pokeData.types[0].type.name,
-        movesCount: pokeData.moves.length
+        movesCount: pokeData.moves.length,
       };
       this.setState({ loadedPokemon: loadedPokemon, isLoading: false });
     } catch (error) {
@@ -50,7 +52,7 @@ class Detail extends Component {
   };
 
   componentWillUnmount() {
-    console.log('Too soon...');
+    console.log("Too soon...");
   }
 
   render() {
@@ -65,7 +67,6 @@ class Detail extends Component {
           weight={this.state.loadedPokemon.weight}
           type={this.state.loadedPokemon.type}
           movesCount={this.state.loadedPokemon.movesCount}
-
         />
       );
     } else if (!this.state.isLoading && !this.state.loadedPokemon.name) {

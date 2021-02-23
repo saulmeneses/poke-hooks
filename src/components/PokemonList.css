@@ -1,10 +1,10 @@
-.list-container{
+.list-container {
   display: flex;
   flex-direction: column;
   margin: 1rem;
 }
 
-.menu-button{
+.menu-button {
   padding: 0.5rem;
   margin: 0.5rem;
   font-size: 18px;
@@ -12,12 +12,12 @@
   border: none;
 }
 
-button.blue{
-  background: #39C1D9;
+button.blue {
+  background: #39c1d9;
   color: white;
 }
 
-button.red{
-  background: #DB6F64;
+button.red {
+  background: #db6f64;
   color: black;
 }

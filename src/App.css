@@ -37,12 +37,12 @@
   }
 }
 
-.container{
+.container {
   display: flex;
   justify-content: center;
 }
 
-.action-button{
+.action-button {
   height: 2rem;
   border-radius: 4px;
   border: solid 1px black;
@@ -51,10 +51,10 @@
   font-size: 18px;
 }
 
-.team-red{
-  color: #DB6F64;
+.team-red {
+  color: #db6f64;
 }
 
-.team-blue{
-  color: #39C1D9;
+.team-blue {
+  color: #39c1d9;
 }
