@@ -6,7 +6,7 @@ const Summary = (props) => {
   return (
     <div className="summary">
       <h1>{props.name}</h1>
-      <img className="summary-image" src={props.image} />
+      <img className="summary-image" alt="pokemon" src={props.image} />
       <p>
         Height: <span className="summary-info-item">{props.height}</span>
       </p>
