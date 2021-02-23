@@ -1,13 +1,12 @@
-import React from 'react';
+import React from "react";
 
-import './Summary.css';
+import "./Summary.css";
 
-
-const Summary = props => {
+const Summary = (props) => {
   return (
     <div className="summary">
       <h1>{props.name}</h1>
-      <img className="summary-image" src={props.image}/>
+      <img className="summary-image" src={props.image} />
       <p>
         Height: <span className="summary-info-item">{props.height}</span>
       </p>
@@ -18,11 +17,11 @@ const Summary = props => {
         Type: <span className="summary-info-item">{props.type}</span>
       </p>
       <p>
-        Moves count:{' '}
+        Moves count:{" "}
         <span className="summary-info-item">{props.movesCount}</span>
       </p>
     </div>
   );
 };
- 
+
 export default Summary;

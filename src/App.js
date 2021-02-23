@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 
 import './App.css';
 
@@ -11,50 +11,45 @@ const TEAMS = {
   RED: 'red',
 };
 
-class App extends Component {
+const App = () => {
 
-  state = {
-    selectedPokemon: 'ditto',
-    team: TEAMS.BLUE,
-    closed: false,
+  const [ selectedPokemon, setSelectedPokemon ] = useState('ditto');
+  const [ team, setTeam ] = useState(TEAMS.BLUE);
+  const [ closed, setClosed ] = useState(false);
+
+  const selectPokemon = name => {
+    setSelectedPokemon(name);
   };
 
-
-  selectPokemon = name => {
-    this.setState({ selectedPokemon: name });
+  const closePokedex = () => {
+    setClosed(true);
   };
 
-  closePokedex = () => {
-    this.setState({ closed: true });
-  };
-
-  changeTeam = () => {
-    const team = this.state.team === TEAMS.BLUE ? TEAMS.RED : TEAMS.BLUE;
-    this.setState({ team });
+  const changeTeam = () => {
+    const newTeam = team === TEAMS.BLUE ? TEAMS.RED : TEAMS.BLUE;
+    setTeam(newTeam);
   }
 
-  render() {
-    let content = (
+  let content = (
+    <div className="container">
+      <PokemonList selectPokemon={selectPokemon} team={team}/>
+      <Detail selectedPokemon={selectedPokemon}/>
+      <div>
+        <button className="action-button" onClick={changeTeam}>Change team!</button>
+        <button className="action-button" onClick={closePokedex}>Close pokedex</button>
+        <p>You are now part of the <strong className={`team-${team}`}>{team}</strong> team!!!</p>
+      </div>
+    </div>
+  );
+
+  if (closed) {
+    content =  (
       <div className="container">
-        <PokemonList selectPokemon={this.selectPokemon} team={this.state.team}/>
-        <Detail selectedPokemon={this.state.selectedPokemon}/>
-        <div>
-          <button className="action-button" onClick={this.changeTeam}>Change team!</button>
-          <button className="action-button" onClick={this.closePokedex}>Close pokedex</button>
-          <p>You are now part of the <strong className={`team-${this.state.team}`}>{this.state.team}</strong> team!!!</p>
-        </div>
+        <h1>Pokedex closed!</h1>
       </div>
     );
-
-    if (this.state.closed) {
-      content =  (
-        <div className="container">
-          <h1>Pokedex closed!</h1>
-        </div>
-      );
-    }
-    return content;
   }
+  return content;
 }
 
 export default App;
