@@ -1,79 +1,85 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 
 import Summary from "./Summary";
 
-class Detail extends Component {
-  state = { loadedPokemon: {}, isLoading: false };
+const Detail = (props) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [pokemon, setPokemon] = useState({});
 
-  shouldComponentUpdate(nextProps, nextState) {
-    console.log("shouldComponentUpdate");
-    return (
-      nextProps.selectedPokemon !== this.props.selectedPokemon ||
-      nextState.loadedPokemon.id !== this.state.loadedPokemon.id ||
-      nextState.isLoading !== this.state.isLoading
-    );
-  }
+  // componentDidUpdate(prevProps) {
+  //   console.log("Component did update");
+  //   if (prevProps.selectedPokemon !== this.props.selectedPokemon) {
+  //     this.fetchData();
+  //   }
+  // }
 
-  componentDidUpdate(prevProps) {
-    console.log("Component did update");
-    if (prevProps.selectedPokemon !== this.props.selectedPokemon) {
-      this.fetchData();
-    }
-  }
-
-  componentDidMount() {
-    this.fetchData();
-  }
-
-  fetchData = async () => {
+  const fetchData = async () => {
     console.log(
-      "Sending Http request for new pokemon with name " +
-        this.props.selectedPokemon
+      `Sending Http request for new pokemon with name ${props.selectedPokemon}`
     );
-    this.setState({ isLoading: true });
-    try {
-      const response = await fetch(
-        `https://pokeapi.co/api/v2/pokemon/${this.props.selectedPokemon}`
-      );
-      const pokeData = await response.json();
 
-      const loadedPokemon = {
-        image: `https://img.pokemondb.net/artwork/large/${pokeData.name}.jpg`,
-        name: pokeData.name,
-        height: pokeData.height,
-        weight: pokeData.weight,
-        type: pokeData.types[0].type.name,
-        movesCount: pokeData.moves.length,
-      };
-      this.setState({ loadedPokemon: loadedPokemon, isLoading: false });
+    setIsLoading(true);
+
+    try {
+      const pokeData = await fetch(
+        `https://pokeapi.co/api/v2/pokemon/${props.selectedPokemon}`
+      ).then((response) => response.json());
+
+      const {
+        name,
+        height,
+        weight,
+        moves,
+        types: [{ type }],
+      } = pokeData;
+
+      setPokemon({
+        name,
+        height,
+        weight,
+        type: type.name,
+        movesCount: moves.length,
+        image: `https://img.pokemondb.net/artwork/large/${name}.jpg`,
+      });
     } catch (error) {
       console.log(error);
     }
+
+    setIsLoading(false);
   };
 
-  componentWillUnmount() {
-    console.log("Too soon...");
+  useEffect(() => {
+    // componentDidMount
+    fetchData();
+
+    return () => {
+      // componentWillUnmount
+      console.log("Too soon...");
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  let content = <p>Loading Detail...</p>;
+
+  if (!isLoading && pokemon.name) {
+    content = (
+      <Summary
+        image={pokemon.image}
+        name={pokemon.name}
+        height={pokemon.height}
+        weight={pokemon.weight}
+        type={pokemon.type}
+        movesCount={pokemon.movesCount}
+      />
+    );
+  } else if (!isLoading && !pokemon.name) {
+    content = <p>Failed to fetch Detail.</p>;
   }
 
-  render() {
-    let content = <p>Loading Detail...</p>;
+  return content;
+};
 
-    if (!this.state.isLoading && this.state.loadedPokemon.name) {
-      content = (
-        <Summary
-          image={this.state.loadedPokemon.image}
-          name={this.state.loadedPokemon.name}
-          height={this.state.loadedPokemon.height}
-          weight={this.state.loadedPokemon.weight}
-          type={this.state.loadedPokemon.type}
-          movesCount={this.state.loadedPokemon.movesCount}
-        />
-      );
-    } else if (!this.state.isLoading && !this.state.loadedPokemon.name) {
-      content = <p>Failed to fetch Detail.</p>;
-    }
-    return content;
-  }
-}
-
-export default Detail;
+export default React.memo(Detail, (prevProps, nextProps) => {
+  // shouldComponentUpdate
+  return prevProps.selectedPokemon === nextProps.selectedPokemon;
+});
